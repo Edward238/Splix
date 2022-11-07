@@ -1,5 +1,14 @@
 local Handler = {}
 
+function Handler:GetHWID()
+  local request = syn and syn.request or request or http.request
+  local body = request({Url = 'https://httpbin.org/get', Method = 'GET'}).Body
+  local headers = game:GetService('HttpService'):JSONDecode(body).headers
+  local hwid = headers['Syn-Fingerprint'] or headers['Sw-Fingerprint'] or nil
+  
+  return hwid
+end
+
 function Handler:Encode(Letters, Numbers, String)
   if not Letters then return end
   if not Numbers then return end
